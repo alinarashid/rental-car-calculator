@@ -97,27 +97,50 @@ public class RentalCarCalculatorApp {
 
     // ======== Calculation methods ====
     // 1. basicRental method
-//    public static double basicRental(int days) {
-//
-//    }
+    public static double basicRental(int days) {
+        double pricePerDay = 29.99;
+        double totalBasicRental = pricePerDay * days;
+        return totalBasicRental;
+    }
 
 
     // 2. optionsCost method
-//    public static double optionsCost(boolean toll, boolean gps, boolean roadside, int days) {
-//
-//    }
+    public static double optionsCost(boolean toll, boolean gps, boolean roadside, int days) {
+        double priceTollTagPerDay = 3.95;
+        double priceGpsPerDay = 2.95;
+        double priceRoadSidePerDay = 3.95;
+
+        double dailyOptionsCost = 0;
+        if (toll) {
+            dailyOptionsCost += priceTollTagPerDay;
+        }
+        if (gps) {
+            dailyOptionsCost += priceGpsPerDay;
+        }
+        if (roadside) {
+            dailyOptionsCost += priceRoadSidePerDay;
+        }
+
+        double totalOptionsCost = dailyOptionsCost * days;
+        return totalOptionsCost;
+    }
 
 
-//    // 3. surcharge method
-//    public static double surcharge(int age , double basicRental) {
-//
-//    }
+    // 3. surcharge method
+    public static double surcharge(int age , double basicRental) {
+        double totalSurchargeCost = 0 ;
+        if (age < 25){
+            totalSurchargeCost = basicRental * 0.3;
+        }
+        return totalSurchargeCost;
+    }
 
 
     // 4. totalCost method
-//    public static double totalCost(double basicRental , double optionsCost, double surcharge) {
-//
-//    }
+    public static double totalCost(double basicRental , double optionsCost, double surcharge) {
+        double totalCostAmount = basicRental + optionsCost + surcharge;
+        return  totalCostAmount;
+    }
 
 
 

@@ -60,15 +60,64 @@ public class RentalCarCalculatorApp {
 
     // ======== Input methods ==========
     // 1. String input method
+    public static String askString(Scanner scanner, String question) {
+        // Show question to the user
+        System.out.print(question);
+        // Read what they typed and send it back
+        return scanner.nextLine();
+    }
+
     // 2. int input method
-    // 3. Yes /No input method
+    public static int askInt(Scanner scanner,String question) {
+        // Show question to the user
+        System.out.print(question);
+        // Read what they typed and send it back
+        int number = scanner.nextInt();
+        scanner.nextLine(); // eat line
+        return  number;
+    }
+
+    // 3. Yes/No input method
+    public static boolean askYesNo(Scanner scanner, String question) {
+        // Show question to the user
+        System.out.print(question);
+        String output = scanner.nextLine();
+
+        // Converting YES/NO to bool
+        if (output.equalsIgnoreCase("Yes")) {
+            return true;
+        } else if (output.equalsIgnoreCase("No")) {
+            return false;
+        } else {
+            System.out.println("Please type Yes or No.");
+            return askYesNo(scanner,question);  // Ask again in case of error
+        }
+    }
 
 
     // ======== Calculation methods ====
     // 1. basicRental method
+//    public static double basicRental(int days) {
+//
+//    }
+
+
     // 2. optionsCost method
-    // 3. surcharge method
+//    public static double optionsCost(boolean toll, boolean gps, boolean roadside, int days) {
+//
+//    }
+
+
+//    // 3. surcharge method
+//    public static double surcharge(int age , double basicRental) {
+//
+//    }
+
+
     // 4. totalCost method
+//    public static double totalCost(double basicRental , double optionsCost, double surcharge) {
+//
+//    }
 
 
 

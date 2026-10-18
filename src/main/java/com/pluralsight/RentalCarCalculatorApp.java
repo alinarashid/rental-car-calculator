@@ -58,6 +58,17 @@ public class RentalCarCalculatorApp {
 
     }
 
+    // ======== Input methods ==========
+    // 1. String input method
+    // 2. int input method
+    // 3. Yes /No input method
+
+
+    // ======== Calculation methods ====
+    // 1. basicRental method
+    // 2. optionsCost method
+    // 3. surcharge method
+    // 4. totalCost method
 
 
 

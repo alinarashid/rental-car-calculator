@@ -37,23 +37,48 @@ public class RentalCarCalculatorApp {
         // One scanner to pass to methods
         Scanner scanner = new Scanner(System.in);
 
-        // --- Inputs ----
+        // ---- Inputs ------
         // Get pickup date (String method)
+        String pickupDate = askString(scanner, "Enter pickup date (MM/DD/YYYY): ");
+
         // Get number of days (int method)
+        int days = askInt(scanner, "How many days will you rent the car? ");
+
         // Get toll tag answer (yes/no method)
+        boolean toll = askYesNo(scanner, "Would you like an electronic toll tag for $3.95/day? (yes/no): ");
+
         // Get GPS answer (yes/no method)
+        boolean gps = askYesNo(scanner, "Would you like a GPS for $2.95/day? (yes/no): ");
+
         // Get roadside assistance answer (yes/no method)
+        boolean roadside = askYesNo(scanner, "Would you like roadside assistance for $3.95/day? (yes/no): ");
+
         // Get age (int method)
+        int age = askInt(scanner, "What is your current age? ");
+
+
 
         // ---- Calculations ---
         // Call basicRental
-        // Call optionsCost
-        // Call surcharge
-        // Call totalCost
+        double basicRentalCost = basicRental(days);
 
+        // Call optionsCost
+        double optionsCostTotal = optionsCost(toll, gps, roadside, days);
+
+        // Call surcharge
+        double surchargeCost = surcharge(age,basicRentalCost);
+
+        // Call totalCost
+        double totalCost = totalCost(basicRentalCost, optionsCostTotal, surchargeCost);
 
         // --- Output ----
         // Display cost summary printf , $%.2f
+        System.out.println("******* Rental Car Calculator *******");
+        System.out.println("Pickup date: " + pickupDate);
+        System.out.printf("Basic car rental:   $%.2f%n", basicRentalCost);
+        System.out.printf("Options cost:       $%.2f%n", optionsCostTotal);
+        System.out.printf("Underage surcharge: $%.2f%n", surchargeCost);
+        System.out.printf("Total cost:         $%.2f%n", totalCost);
 
 
     }

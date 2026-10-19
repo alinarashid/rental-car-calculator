@@ -1,5 +1,7 @@
 package com.pluralsight;
 
+import java.util.Scanner;
+
 /*
  * Rental Car Calculator
  * Workbook 1c – Rental Car Company exercise
@@ -10,127 +12,141 @@ package com.pluralsight;
  * - Display a cost summary
  *
  * Inputs (6):
- *   pickup date ........ String
- *   number of days ..... int
- *   toll tag ........... boolean (yes/no)
- *   GPS ................ boolean (yes/no)
- *   roadside assist .... boolean (yes/no)
- *   age ................ int
+ *   1. pickup date ........ String
+ *   2. number of days ..... int
+ *   3. toll tag ........... boolean (yes/no)
+ *   4. GPS ................ boolean (yes/no)
+ *   5. roadside assist .... boolean (yes/no)
+ *   6. age ................ int
  *
  * Outputs (4):
- *   basic car rental
- *   options cost
- *   underage driver surcharge
- *   total cost
+ *   1. basic car rental
+ *   2. options cost
+ *   3. underage driver surcharge
+ *   4. total cost
  *
  * Prices:
  *   basic rental $29.99/day | toll tag $3.95/day
  *   GPS $2.95/day           | roadside $3.95/day
  *   under 25: 30% surcharge on basic rental
+ *
+ * Structure:
+ *   main                → inputs → calculations → output
+ *   input methods       → ask a question, read the answer, return it
+ *   calculation methods → take in only what they need, return a number
  */
-
-import java.util.Scanner;
 
 public class RentalCarCalculatorApp {
     public static void main(String[] args) {
 
-        // One scanner to pass to methods
+        // One Scanner for the whole app, passed into every input method
         Scanner scanner = new Scanner(System.in);
 
-        // ---- Inputs ------
-        // Get pickup date (String method)
+        System.out.println("** Welcome to Rental Car Calculator **\n");
+
+        // ================== Inputs ==================
         String pickupDate = askString(scanner, "Enter pickup date (MM/DD/YYYY): ");
-
-        // Get number of days (int method)
         int days = askInt(scanner, "How many days will you rent the car? ");
-
-        // Get toll tag answer (yes/no method)
         boolean toll = askYesNo(scanner, "Would you like an electronic toll tag for $3.95/day? (yes/no): ");
-
-        // Get GPS answer (yes/no method)
         boolean gps = askYesNo(scanner, "Would you like a GPS for $2.95/day? (yes/no): ");
-
-        // Get roadside assistance answer (yes/no method)
         boolean roadside = askYesNo(scanner, "Would you like roadside assistance for $3.95/day? (yes/no): ");
-
-        // Get age (int method)
         int age = askInt(scanner, "What is your current age? ");
 
+        // ================== Calculations ==================
+        // The order matters here: surcharge uses basic rental and total uses all three results.
+        double basicRentalCost = calculateBasicRental(days);
+        double optionsCost = calculateOptionsCost(toll, gps, roadside, days);
+        double surchargeCost = calculateSurcharge(age, basicRentalCost);
+        double totalCost = calculateTotalCost(basicRentalCost, optionsCost, surchargeCost);
 
-
-        // ---- Calculations ---
-        // Call basicRental
-        double basicRentalCost = basicRental(days);
-
-        // Call optionsCost
-        double optionsCostTotal = optionsCost(toll, gps, roadside, days);
-
-        // Call surcharge
-        double surchargeCost = surcharge(age,basicRentalCost);
-
-        // Call totalCost
-        double totalCost = totalCost(basicRentalCost, optionsCostTotal, surchargeCost);
-
-        // --- Output ----
-        // Display cost summary printf , $%.2f
-        System.out.println("******* Rental Car Calculator *******");
+        // ================== Output ==================
+        // Display cost summary, money formatted to 2 decimal places
+        System.out.println();
+        System.out.println("********** Cost Summary **********");
         System.out.println("Pickup date: " + pickupDate);
         System.out.printf("Basic car rental:   $%.2f%n", basicRentalCost);
-        System.out.printf("Options cost:       $%.2f%n", optionsCostTotal);
+        System.out.printf("Options cost:       $%.2f%n", optionsCost);
         System.out.printf("Underage surcharge: $%.2f%n", surchargeCost);
         System.out.printf("Total cost:         $%.2f%n", totalCost);
-
-
     }
 
-    // ======== Input methods ==========
-    // 1. String input method
+    // ================== Input methods ==================
+
+    /**
+     * Asks a question and returns the user's full line of text.
+     *
+     * @param scanner  the shared Scanner
+     * @param question the prompt to display
+     * @return the text the user typed
+     */
     public static String askString(Scanner scanner, String question) {
-        // Show question to the user
         System.out.print(question);
-        // Read what they typed and send it back
         return scanner.nextLine();
     }
 
-    // 2. int input method
-    public static int askInt(Scanner scanner,String question) {
-        // Show question to the user
+    /**
+     * Asks a question and returns the user's whole-number answer.
+     *
+     * @param scanner  the shared Scanner
+     * @param question the prompt to display
+     * @return the number the user typed
+     */
+    public static int askInt(Scanner scanner, String question) {
         System.out.print(question);
-        // Read what they typed and send it back
         int number = scanner.nextInt();
-        scanner.nextLine(); // eat line
-        return  number;
+        scanner.nextLine(); // consume the leftover Enter so the next nextLine() isn't skipped
+        return number;
     }
 
-    // 3. Yes/No input method
+    /**
+     * Asks a yes/no question and converts the answer to a boolean.
+     * If the answer is not yes or no, it shows a message and asks again.
+     *
+     * @param scanner  the shared Scanner
+     * @param question the prompt to display
+     * @return true for "yes", false for "no"
+     */
     public static boolean askYesNo(Scanner scanner, String question) {
-        // Show question to the user
         System.out.print(question);
-        String output = scanner.nextLine();
+        String answer = scanner.nextLine();
 
-        // Converting YES/NO to bool
-        if (output.equalsIgnoreCase("Yes")) {
+        // Convert yes/no to a boolean (any capitalization)
+        if (answer.equalsIgnoreCase("Yes")) {
             return true;
-        } else if (output.equalsIgnoreCase("No")) {
+        } else if (answer.equalsIgnoreCase("No")) {
             return false;
         } else {
             System.out.println("Please type Yes or No.");
-            return askYesNo(scanner,question);  // Ask again in case of error
+            return askYesNo(scanner, question); // invalid answer: ask the same question again
         }
     }
 
+    // ================== Calculation methods ==================
 
-    // ======== Calculation methods ====
-    // 1. basicRental method
-    public static double basicRental(int days) {
+    /**
+     * Calculates the basic rental cost: the daily rate times the number of days.
+     *
+     * @param days number of rental days
+     * @return the basic rental cost
+     */
+    public static double calculateBasicRental(int days) {
         double pricePerDay = 29.99;
         double totalBasicRental = pricePerDay * days;
         return totalBasicRental;
     }
 
-
-    // 2. optionsCost method
-    public static double optionsCost(boolean toll, boolean gps, boolean roadside, int days) {
+    /**
+     * Calculates the total cost of the selected options.
+     * Adds the daily price of each option the user said yes to,
+     * then multiplies that daily total by the number of rental days.
+     *
+     * @param toll     true if the user wants a toll tag ($3.95/day)
+     * @param gps      true if the user wants a GPS ($2.95/day)
+     * @param roadside true if the user wants roadside assistance ($3.95/day)
+     * @param days     number of rental days
+     * @return the total options cost
+     */
+    public static double calculateOptionsCost(boolean toll, boolean gps, boolean roadside, int days) {
         double priceTollTagPerDay = 3.95;
         double priceGpsPerDay = 2.95;
         double priceRoadSidePerDay = 3.95;
@@ -150,25 +166,33 @@ public class RentalCarCalculatorApp {
         return totalOptionsCost;
     }
 
-
-    // 3. surcharge method
-    public static double surcharge(int age , double basicRental) {
-        double totalSurchargeCost = 0 ;
-        if (age < 25){
-            totalSurchargeCost = basicRental * 0.3;
+    /**
+     * Calculates the underage driver surcharge.
+     * Drivers under 25 pay an extra 30% of the basic rental.
+     * Drivers 25 and older pay no surcharge.
+     *
+     * @param age             the driver's age
+     * @param basicRentalCost the basic rental cost
+     * @return the surcharge amount (0 if the driver is 25 or older)
+     */
+    public static double calculateSurcharge(int age, double basicRentalCost) {
+        double totalSurchargeCost = 0;
+        if (age < 25) {
+            totalSurchargeCost = basicRentalCost * 0.3; // 30%
         }
         return totalSurchargeCost;
     }
 
-
-    // 4. totalCost method
-    public static double totalCost(double basicRental , double optionsCost, double surcharge) {
-        double totalCostAmount = basicRental + optionsCost + surcharge;
-        return  totalCostAmount;
+    /**
+     * Calculates the total cost by adding the three cost parts together.
+     *
+     * @param basicRentalCost the basic rental cost
+     * @param optionsCost     the total options cost
+     * @param surchargeCost   the underage surcharge
+     * @return the total cost
+     */
+    public static double calculateTotalCost(double basicRentalCost, double optionsCost, double surchargeCost) {
+        double totalCostAmount = basicRentalCost + optionsCost + surchargeCost;
+        return totalCostAmount;
     }
-
-
-
-
-
 }
